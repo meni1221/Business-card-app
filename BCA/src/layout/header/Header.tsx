@@ -1,9 +1,12 @@
-import React from 'react'
+
+
 
 export default function Header() {
   return (
-    <div>
-      Header
-    </div>
+    <>
+      <header>
+        <h1>Business card app</h1>
+      </header>
+    </>
   )
 }
