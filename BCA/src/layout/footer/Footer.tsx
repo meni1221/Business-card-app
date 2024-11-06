@@ -1,9 +1,11 @@
-import React from 'react'
+
 
 export default function Footer() {
   return (
-    <div>
-      Footer
-    </div>
+    <footer>
+      <p>
+       Created by Meni Levi &copy;{new Date().getFullYear()}
+      </p>
+    </footer>
   )
 }
