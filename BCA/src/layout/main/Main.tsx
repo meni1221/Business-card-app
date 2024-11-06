@@ -1,9 +1,13 @@
-import React from 'react'
+import Users from "../../users/Users";
+
 
 export default function Main() {
   return (
-    <div>
-      Main
-    </div>
+    <>
+      <main>
+        <Users/>
+      </main>
+    </>
   )
 }
+
