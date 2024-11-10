@@ -1,11 +1,14 @@
 import Users from "../../users/Users";
 
+interface Props{
+  children:React.ReactNode
+}
 
-export default function Main() {
+export default function Main({children}:Props) {
   return (
     <>
       <main>
-        <Users/>
+        {children}
       </main>
     </>
   )
