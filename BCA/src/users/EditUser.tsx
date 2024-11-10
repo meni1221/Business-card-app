@@ -1,4 +1,5 @@
 import  { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface User {
   id?: string;
@@ -13,49 +14,80 @@ interface Props {
   user: User;
 }
 
-export default function EditUser(props: Props) {
+export default function EditUser({user,editUser}: Props) {
+  const navigate = useNavigate()
   const [username, setusername] = useState("");
   const [email, setEmail] = useState("");
   const [age, setAge] = useState(0);
   const [img, setImg] = useState("");
+  const [status, setstatus] = useState(false)
+  const id: string | undefined = user.id;
 
   useEffect(() => {
-    setusername(props.user.username);
-    setEmail(props.user.email);
-    setAge(props.user.age);
-    setImg(props.user.img);
+    setusername(user.username);
+    setEmail(user.email);
+    setAge(user.age);
+    setImg(user.img);
   }, []);
 
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if(status){editUser({
+      id,
+      username,
+      email,
+      age,
+      img,
+    })}
+    setstatus(false)
+    navigate("/users")
+    
+  
+  };
   return (
     <>
+    <div className="form-container">
+    <form onSubmit={handleSubmit}>
+      <img
+          src={img}
+          alt=""
+          style={{ maxWidth: "250px", borderRadius: "50%" }}
+      />
       <input
         type="text"
-        value={username}
+        placeholder={username}
         onChange={(e) => setusername(e.target.value)}
       />
 
       <input
         type="text"
-        value={email}
+        placeholder={email}
         onChange={(e) => setEmail(e.target.value)}
       />
 
       <input
         type="number"
-        value={age}
+        placeholder={age.toString()}
         onChange={(e) => setAge(Number(e.target.value))}
       />
 
       <input
         type="text"
-        value={img}
+        placeholder={img}
         onChange={(e) => setImg(e.target.value)}
       />
       
       <button
-        onClick={() => props.editUser({ ...props.user, username,email,age,img })}>
-            update
+        onClick={() => setstatus(true)}>
+            Save
       </button>
+
+      <button
+        onClick={() => editUser(user)}>
+            Cancel
+      </button>
+      </form>
+      </div>
     </>
   );
 }
