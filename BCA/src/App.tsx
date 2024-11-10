@@ -1,13 +1,13 @@
-import "./app.css"
+import "./pp.css" 
 import Layout from './layout/Layout'
+import AppRouter from "./router/AppRouter"
 
 function App() {
 
   return (
   <>
-        <Layout/>
-
-  </>
+        <Layout children={<AppRouter/>}/>
+  </> 
   )
 }
 
