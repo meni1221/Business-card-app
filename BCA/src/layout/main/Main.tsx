@@ -1,4 +1,3 @@
-import Users from "../../users/Users";
 
 interface Props{
   children:React.ReactNode
