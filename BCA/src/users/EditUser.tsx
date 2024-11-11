@@ -1,92 +1,89 @@
-import  { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import PageHeader from "../components/PageHeader";
+import { UserContext } from "../Providers/UserProvider";
 
-interface User {
-  id?: string;
-  username: string;
-  email: string;
-  age: number;
-  img: string;
-}
-
-interface Props {
-  editUser: (user:User) => void;
-  user: User;
-}
-
-export default function EditUser({user,editUser}: Props) {
-  const navigate = useNavigate()
+export default function EditUser() {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const { users, setUsers } = useContext(UserContext);
   const [username, setusername] = useState("");
   const [email, setEmail] = useState("");
   const [age, setAge] = useState(0);
   const [img, setImg] = useState("");
-  const [status, setstatus] = useState(false)
-  const id: string | undefined = user.id;
+  const [status, setstatus] = useState(true);
+
+  const pervUser = users.find((user) => id === user.id)!;
 
   useEffect(() => {
-    setusername(user.username);
-    setEmail(user.email);
-    setAge(user.age);
-    setImg(user.img);
+    setusername(pervUser.username);
+    setEmail(pervUser.email);
+    setAge(pervUser.age);
+    setImg(pervUser.img);
   }, []);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if(status){editUser({
-      id,
-      username,
-      email,
-      age,
-      img,
-    })}
-    setstatus(false)
-    navigate("/users")
-    
-  
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (status) {
+      setUsers((users) =>
+        users.map((user) =>
+          user.id === id ? { ...user, username, email, age, img } : user
+        )
+      );
+    }
+
+    navigate("/users");
+    setstatus(false);
   };
   return (
     <>
-    <div className="form-container">
-    <form onSubmit={handleSubmit}>
-      <img
-          src={img}
-          alt=""
-          style={{ maxWidth: "250px", borderRadius: "50%" }}
-      />
-      <input
-        type="text"
-        placeholder={username}
-        onChange={(e) => setusername(e.target.value)}
-      />
+      <PageHeader title="Edit pages" subtitle="welcome Edit pages" />
+      <div className="form-container">
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <img
+              src={pervUser.img}
+              alt=""
+              style={{ maxWidth: "250px", borderRadius: "50%" }}
+            />
+          </div>
 
-      <input
-        type="text"
-        placeholder={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
+          <div className="form-group">
+            <input
+              type="text"
+              defaultValue={pervUser.username}
+              onChange={(e) => setusername(e.target.value)}
+            />
+          </div>
 
-      <input
-        type="number"
-        placeholder={age.toString()}
-        onChange={(e) => setAge(Number(e.target.value))}
-      />
+          <div className="form-group">
+            <input
+              type="text"
+              defaultValue={pervUser.email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
 
-      <input
-        type="text"
-        placeholder={img}
-        onChange={(e) => setImg(e.target.value)}
-      />
-      
-      <button
-        onClick={() => setstatus(true)}>
-            Save
-      </button>
+          <div className="form-group">
+            <input
+              min={0}
+              max={120}
+              type="number"
+              defaultValue={pervUser.age.toString()}
+              onChange={(e) => setAge(Number(e.target.value))}
+            />
+          </div>
 
-      <button
-        onClick={() => editUser(user)}>
-            Cancel
-      </button>
-      </form>
+          <div className="form-group">
+            <input
+              type="text"
+              defaultValue={pervUser.img}
+              onChange={(e) => setImg(e.target.value)}
+            />
+          </div>
+
+          <button type="submit">Save</button>
+        </form>
       </div>
     </>
   );
